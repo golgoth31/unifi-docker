@@ -1,5 +1,7 @@
 # unifi-docker
 
+[![CircleCI](https://circleci.com/gh/golgoth31/unifi-docker.svg?style=svg&circle-token=d8911f585392935c89605c9c1871fdca9897aac6)](https://circleci.com/gh/golgoth31/unifi-docker)
+
 ## `latest` tag
 
 `latest` is now tracking unifi 6.0.x as of 2020-10-20.
@@ -16,8 +18,9 @@ It is suggested you start running this as a non root user. The default right now
 You will not be able to bind to lower ports by default. If you also pass the docker run flag `--sysctl` with `net.ipv4.ip_unprivileged_port_start=0` then you will be able to freely bind to whatever port you wish. This should not be needed if you are using the default ports.
 
 ## Mongo and Docker for windows
- Unifi uses mongo store its data. Mongo uses the fsync() system call on its data files. Because of how docker for windows works you can't bind mount `/unifi/db/data` on a docker for windows container. Therefore `-v ~/unifi:/unifi` won't work.
- [Discussion on the issue](https://github.com/docker/for-win/issues/138).
+
+Unifi uses mongo store its data. Mongo uses the fsync() system call on its data files. Because of how docker for windows works you can't bind mount `/unifi/db/data` on a docker for windows container. Therefore `-v ~/unifi:/unifi` won't work.
+[Discussion on the issue](https://github.com/docker/for-win/issues/138).
 
 ## Supported Docker Hub Tags and Respective `Dockerfile` Links
 
@@ -62,6 +65,7 @@ A compose file has been included that will bring up mongo and the controller,
 using named volumes for important directories.
 
 Simply clone this repo or copy the `docker-compose.yml` file and run
+
 ```bash
 docker-compose up -d
 ```
@@ -74,7 +78,7 @@ The default example requires some l3 adoption method. You have a couple options 
 
 #### Force adoption IP
 
-Run UniFi Docker and open UniFi in browser. Go under Settings -> Controller and then enter the IP address of the Docker host machine in "Controller Hostname/IP", and check the "Override inform host with controller hostname/IP". Save settings and restart UniFi Docker container. 
+Run UniFi Docker and open UniFi in browser. Go under Settings -> Controller and then enter the IP address of the Docker host machine in "Controller Hostname/IP", and check the "Override inform host with controller hostname/IP". Save settings and restart UniFi Docker container.
 
 #### SSH Adoption
 
@@ -88,7 +92,6 @@ set-inform http://<host_ip>:8080/inform
 #### Other Options
 
 You can see more options on the [UniFi website](https://help.ubnt.com/hc/en-us/articles/204909754-UniFi-Layer-3-methods-for-UAP-adoption-and-management)
-
 
 ### Layer 2 Adoption
 
@@ -106,7 +109,6 @@ It is possible to configure the `macvlan` driver to bridge your container to the
 
 The `beta` image has been updated to support package installation at run time. With this change you can now install the beta releases on more systems, such as Synology. This should open up access to the beta program for more users of this docker image.
 
-
 If you would like to submit a new feature for the images the beta branch is probably a good one to apply it against as well. I will be cleaing up the Dockerfile under beta and gradually pushing out the improvements to the other branches. So any major changes should apply cleanly against the `beta` branch.
 
 ### Installing Beta Builds On The Command Line
@@ -114,7 +116,6 @@ If you would like to submit a new feature for the images the beta branch is prob
 Using the Beta build is pretty easy, just use the `jacobalberty/unifi:beta` image and add `-e PKGURL=https://dl.ubnt.com/unifi/5.6.30/unifi_sysvinit_all.deb` to your usual command line.
 
 Simply replace the url to the debian package with the version you prefer.
-
 
 ### Building Beta Using `docker-compose.yml` Version 2
 
@@ -163,7 +164,6 @@ This is an entirely new volume. You can place scripts you want to launch every t
 ### `/var/run/unifi`
 
 Run information, in general you will not need to touch this volume. It is there to ensure UniFi has a place to write its PID files
-
 
 ### Legacy Volumes
 
@@ -224,8 +224,8 @@ Used to start the JVM with additional arguments.
 Default: `unset`
 
 ### `JVM_MAX_HEAP_SIZE`
-Java Virtual Machine (JVM) allocates available memory. 
-For larger installations a larger value is recommended. For memory constrained system this value can be lowered. 
+Java Virtual Machine (JVM) allocates available memory.
+For larger installations a larger value is recommended. For memory constrained system this value can be lowered.
 Default `1024M`
 
 ### External MongoDB environment variables
@@ -243,7 +243,6 @@ Maps to `statdb.mongo.uri`.
 ### `DB_NAME`
 
 Maps to `unifi.db.name`.
-
 
 ## Expose:
 
@@ -268,7 +267,6 @@ While micro-service patterns try to avoid running multiple processes in a contai
 `dumb-init` has now been removed. Instead it is now suggested you include --init in your docker run command line. If you are using docker-compose you can accomplish the same by making sure you use version 2.2 of the yml format and add `init: true` to your service definition.
 
 `unifi.sh` executes and waits on the jsvc process which orchestrates running the controller as a service. The wrapper script also traps SIGTERM to issue the appropriate stop command to the unifi java `com.ubnt.ace.Launcher` process in the hopes that it helps keep the shutdown graceful.
-
 
 ## Init scripts
 
